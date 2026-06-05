@@ -1,0 +1,49 @@
+name: Report an issue
+description: Report a problem with the fabricstack site or a catalog entry (incorrect info, broken link, bug).
+title: "[Issue]: <short summary>"
+labels: ["issue"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Use this form to report a problem with the **site** or an **existing catalog entry**: for example incorrect information, a broken link, an out-of-date tool, or a bug.
+
+        Proposing a *new* tool? Use the [Submit a tool](https://github.com/gronnerup/fabricstack/issues/new?template=submit-tool.yml) form instead. For a small correction to an entry, you can also use the **Suggest edit** link on the tool's page to open a pull request directly.
+
+  - type: dropdown
+    id: kind
+    attributes:
+      label: What kind of issue is this?
+      options:
+        - Incorrect information in a catalog entry
+        - Out-of-date entry (e.g. tool deprecated, moved, or renamed)
+        - Broken link
+        - Site bug (layout, search, filters, etc.)
+        - Other
+    validations:
+      required: true
+
+  - type: input
+    id: where
+    attributes:
+      label: Where?
+      description: The page URL or tool name this is about (if applicable).
+      placeholder: https://fabricstack.dev/tools/dax-studio
+    validations:
+      required: false
+
+  - type: textarea
+    id: description
+    attributes:
+      label: What's wrong?
+      description: Describe the problem. For incorrect info, please include the correct value and a source if you have one.
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected behavior
+      description: For a site bug, what did you expect to happen? Steps to reproduce help.
+    validations:
+      required: false

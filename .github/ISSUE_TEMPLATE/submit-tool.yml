@@ -1,0 +1,191 @@
+name: Submit a tool
+description: Propose a tool, library, framework, or resource for the fabricstack catalog.
+title: "[Tool]: <name>"
+labels: ["submission"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for proposing a tool! Please review the **[inclusion criteria](https://fabricstack.dev/criteria)** first.
+
+        A submission must be (1) specifically built for or directly useful to Microsoft Fabric and/or Power BI development, (2) publicly accessible, and (3) an actual *tool* (CLI, SDK, API, MCP server, library, framework, extension, app, template, or hosted service), **not** a blog post, course, book, video, or tutorial.
+
+        Each field below maps to a frontmatter field in the catalog entry. The maintainer reviews every submission and either opens a PR (approved) or closes this issue citing the criterion that wasn't met.
+
+  - type: input
+    id: title
+    attributes:
+      label: Name
+      description: Display name of the tool.
+      placeholder: Fabric CLI
+    validations:
+      required: true
+
+  - type: input
+    id: url
+    attributes:
+      label: Primary URL
+      description: Homepage or repository; the main link visitors should follow.
+      placeholder: https://github.com/microsoft/fabric-cli
+    validations:
+      required: true
+
+  - type: input
+    id: docs_url
+    attributes:
+      label: Documentation URL
+      description: Link to docs, if separate from the primary URL. Optional.
+      placeholder: https://learn.microsoft.com/fabric/cli
+    validations:
+      required: false
+
+  - type: input
+    id: repo_url
+    attributes:
+      label: Source repository URL
+      description: Source repo, if different from the primary URL. Optional.
+      placeholder: https://github.com/microsoft/fabric-cli
+    validations:
+      required: false
+
+  - type: textarea
+    id: description
+    attributes:
+      label: Description
+      description: One or two sentences describing what it does. Shown on catalog cards.
+      placeholder: Official Microsoft command-line interface for managing Microsoft Fabric resources.
+    validations:
+      required: true
+
+  - type: dropdown
+    id: category
+    attributes:
+      label: Category
+      description: A tool belongs to exactly one category. Pick the discipline it primarily serves, or the Fabric workload it targets.
+      options:
+        - platform-apis
+        - devops-cicd
+        - ai-mcp
+        - semantic-modeling
+        - dax-performance
+        - reporting-embedding
+        - ide-extensibility
+        - data-engineering
+        - data-science-ml
+        - data-warehouse
+        - real-time-intelligence
+        - databases
+        - data-factory-integration
+        - governance-admin
+    validations:
+      required: true
+
+  - type: dropdown
+    id: type
+    attributes:
+      label: Type
+      options:
+        - cli
+        - sdk
+        - api
+        - mcp
+        - library
+        - framework
+        - extension
+        - desktop-app
+        - web-app
+        - template
+        - service
+    validations:
+      required: true
+
+  - type: input
+    id: tags
+    attributes:
+      label: Tags
+      description: Up to 6, lowercase, hyphen-separated, comma-delimited. Optional. See tag conventions.
+      placeholder: official, automation, cicd, deployment
+    validations:
+      required: false
+
+  - type: dropdown
+    id: pricing
+    attributes:
+      label: Pricing
+      options:
+        - free
+        - freemium
+        - paid
+    validations:
+      required: true
+
+  - type: dropdown
+    id: source
+    attributes:
+      label: Source
+      options:
+        - open-source
+        - source-available
+        - proprietary
+    validations:
+      required: true
+
+  - type: dropdown
+    id: maintainer
+    attributes:
+      label: Maintainer
+      description: Who is behind the tool.
+      options:
+        - microsoft
+        - community
+        - vendor
+    validations:
+      required: true
+
+  - type: input
+    id: author
+    attributes:
+      label: Author
+      description: Display name of the person or organization behind it.
+      placeholder: Microsoft
+    validations:
+      required: true
+
+  - type: input
+    id: language
+    attributes:
+      label: Primary language
+      description: e.g. Python, C#, TypeScript. Optional.
+      placeholder: Python
+    validations:
+      required: false
+
+  - type: dropdown
+    id: status
+    attributes:
+      label: Status
+      description: Defaults to "ga" if unsure.
+      options:
+        - ga
+        - preview
+        - deprecated
+    validations:
+      required: false
+
+  - type: textarea
+    id: notes
+    attributes:
+      label: Submitter notes
+      description: Anything else the maintainer should know, e.g. why it meets the criteria, relationship to other tools, or a suggested body. Optional.
+    validations:
+      required: false
+
+  - type: checkboxes
+    id: confirm
+    attributes:
+      label: Confirmation
+      options:
+        - label: This is a tool (not a blog post, course, book, video, or tutorial) and is publicly accessible.
+          required: true
+        - label: I've checked the catalog and this tool isn't already listed.
+          required: true

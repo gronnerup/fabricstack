@@ -1,0 +1,64 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+
+const issueUrl =
+  'https://github.com/gronnerup/fabricstack/issues/new?template=submit-tool.yml';
+---
+
+<BaseLayout
+  title="Submit a tool"
+  description="How to submit a tool to the fabricstack catalog via a GitHub Issue Form."
+>
+  <div class="max-w-2xl prose prose-zinc dark:prose-invert">
+    <h1>Submit a tool</h1>
+    <p>
+      fabricstack is curated against published <a href="/criteria">inclusion
+      criteria</a>. Submissions are made through a GitHub Issue Form, reviewed by
+      the site maintainer, and, if approved, added to the catalog via a pull
+      request.
+    </p>
+
+    <h2>Before you submit</h2>
+    <p>To be eligible, a tool must:</p>
+    <ol>
+      <li>Be specifically built for, or directly useful to, Microsoft Fabric and/or Power BI development.</li>
+      <li>Be publicly accessible (not internal-only or behind a private agreement).</li>
+      <li>
+        Be an actual <strong>tool</strong> (a CLI, SDK, API, MCP server,
+        library, framework, extension, app, template, or hosted service) and
+        <strong>not</strong> a blog post, course, book, video, or tutorial.
+      </li>
+    </ol>
+    <p>
+      Documentation, active maintenance, and a free tier are <em>not</em>
+      required. Deprecated tools stay in the catalog with a badge.
+    </p>
+
+    <h2>How it works</h2>
+    <ol>
+      <li>Open the submission form and fill in the tool's details.</li>
+      <li>The maintainer reviews it against the criteria.</li>
+      <li>
+        Approved tools are merged and deploy within about a minute. Declined
+        submissions are closed with a comment referencing the criterion that
+        wasn't met.
+      </li>
+    </ol>
+
+    <p class="not-prose mt-8">
+      <a
+        href={issueUrl}
+        class="inline-flex rounded-md bg-accent px-5 py-2.5 text-sm font-medium text-accent-contrast hover:opacity-90"
+      >
+        Open the submission form on GitHub →
+      </a>
+    </p>
+
+    <h2>Edits & deprecations</h2>
+    <p>
+      Spotted something out of date? Every tool's detail page has a
+      <strong>Suggest edit</strong> link that opens GitHub's editor for that
+      file, so you can propose a change as a pull request directly.
+    </p>
+  </div>
+</BaseLayout>

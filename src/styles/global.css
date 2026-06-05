@@ -1,0 +1,39 @@
+/* Self-hosted variable fonts (SPEC §6.2) */
+@import '@fontsource-variable/geist';
+@import '@fontsource-variable/geist-mono';
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    /* Accent = teal-600 light / teal-400 dark (SPEC §6.1).
+       Stored as space-separated RGB channels for Tailwind's
+       `rgb(var(--color-accent) / <alpha-value>)` mapping. */
+    --color-accent: 13 148 136; /* #0d9488 teal-600 */
+    --color-accent-contrast: 255 255 255; /* white text on accent */
+
+    color-scheme: light dark;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --color-accent: 45 212 191; /* #2dd4bf teal-400 */
+      --color-accent-contrast: 9 9 11; /* zinc-950 text on bright accent */
+    }
+  }
+
+  html {
+    @apply scroll-smooth antialiased;
+  }
+
+  body {
+    @apply bg-white text-zinc-900 dark:bg-zinc-950 dark:text-zinc-100;
+    @apply font-sans;
+  }
+
+  :focus-visible {
+    @apply outline-none ring-2 ring-accent ring-offset-2 ring-offset-white dark:ring-offset-zinc-950;
+  }
+}

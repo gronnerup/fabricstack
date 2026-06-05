@@ -1,0 +1,74 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import { CATEGORIES, TYPES, PRICING, SOURCES, MAINTAINERS } from '../content/config';
+import {
+  CATEGORY_LABELS,
+  TYPE_LABELS,
+  PRICING_LABELS,
+  SOURCE_LABELS,
+  MAINTAINER_LABELS,
+} from '../lib/labels';
+
+interface Props {
+  tools: CollectionEntry<'tools'>[];
+}
+
+const { tools } = Astro.props;
+
+const count = (
+  key: 'category' | 'type' | 'pricing' | 'source' | 'maintainer',
+  value: string,
+) => tools.filter((t) => t.data[key] === value).length;
+
+const groups = [
+  { key: 'category', label: 'Category', values: CATEGORIES, labels: CATEGORY_LABELS },
+  { key: 'type', label: 'Type', values: TYPES, labels: TYPE_LABELS },
+  { key: 'pricing', label: 'Pricing', values: PRICING, labels: PRICING_LABELS },
+  { key: 'source', label: 'Source', values: SOURCES, labels: SOURCE_LABELS },
+  { key: 'maintainer', label: 'Maintainer', values: MAINTAINERS, labels: MAINTAINER_LABELS },
+] as const;
+---
+
+<aside class="lg:w-64 lg:shrink-0">
+  <details open>
+    <summary class="lg:hidden cursor-pointer text-sm font-medium mb-4 select-none">
+      Filters
+    </summary>
+    <form id="filters" class="space-y-6">
+      <div>
+        <label class="flex items-center gap-2 text-sm">
+          <input type="checkbox" id="hide-deprecated" checked class="accent-accent" />
+          Hide deprecated
+        </label>
+      </div>
+      {
+        groups.map((g) => (
+          <fieldset>
+            <legend class="text-xs font-semibold uppercase tracking-wide text-zinc-500 mb-2">
+              {g.label}
+            </legend>
+            <div class="space-y-1.5">
+              {g.values.filter((v) => count(g.key, v) > 0).map((v) => (
+                <label class="flex items-center justify-between gap-2 text-sm text-zinc-700 dark:text-zinc-300">
+                  <span class="flex items-center gap-2">
+                    <input
+                      type="checkbox"
+                      class="filter accent-accent"
+                      data-group={g.key}
+                      value={v}
+                    />
+                    {g.labels[v]}
+                  </span>
+                  <span class="font-mono text-[11px] text-zinc-400">{count(g.key, v)}</span>
+                </label>
+              ))}
+            </div>
+          </fieldset>
+        ))
+      }
+      <button type="button" id="clear-filters" class="text-sm text-accent hover:underline">
+        Clear all filters
+      </button>
+    </form>
+  </details>
+</aside>

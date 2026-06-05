@@ -1,0 +1,104 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import Badge from './Badge.astro';
+import { TYPE_LABELS, PRICING_LABELS } from '../lib/labels';
+import favicons from '../data/favicons.json';
+
+interface Props {
+  tool: CollectionEntry<'tools'>;
+}
+
+const { tool } = Astro.props;
+const d = tool.data;
+
+// Favicon cached at build time into /public/favicons (SPEC §7). Falls back to
+// a lettered tile when no icon could be fetched for the host.
+let host = '';
+try {
+  host = new URL(d.url).hostname;
+} catch {
+  host = '';
+}
+const faviconFile = (favicons as Record<string, string>)[host];
+const favicon = faviconFile ? `/favicons/${faviconFile}` : '';
+
+const isDeprecated = d.status === 'deprecated';
+const pricingTone = d.pricing === 'free' ? 'green' : d.pricing === 'freemium' ? 'blue' : 'amber';
+
+// Lowercased haystack used by the client-side search on /browse.
+const search = [d.title, d.description, d.author, ...d.tags, d.category, d.type]
+  .join(' ')
+  .toLowerCase();
+---
+
+<article
+  class="group relative flex flex-col rounded-lg bg-zinc-50 dark:bg-zinc-900 p-5 ring-1 ring-zinc-200/60 dark:ring-zinc-800 hover:ring-accent/60 transition"
+  data-tool
+  data-slug={tool.id}
+  data-category={d.category}
+  data-type={d.type}
+  data-pricing={d.pricing}
+  data-source={d.source}
+  data-maintainer={d.maintainer}
+  data-deprecated={String(isDeprecated)}
+  data-tags={d.tags.join(' ')}
+  data-search={search}
+  data-title={d.title.toLowerCase()}
+  data-added={d.added.valueOf()}
+>
+  <div class="flex items-start gap-3">
+    {
+      favicon ? (
+        <img
+          src={favicon}
+          alt=""
+          width="20"
+          height="20"
+          loading="lazy"
+          class="mt-0.5 h-5 w-5 shrink-0 rounded"
+        />
+      ) : (
+        <span
+          aria-hidden="true"
+          class="mt-0.5 grid h-5 w-5 shrink-0 place-items-center rounded bg-zinc-200 dark:bg-zinc-700 text-[11px] font-semibold text-zinc-500 dark:text-zinc-300"
+        >
+          {d.title.charAt(0)}
+        </span>
+      )
+    }
+    <div class="min-w-0 flex-1">
+      <h3
+        class:list={[
+          'font-medium leading-tight',
+          isDeprecated && 'line-through',
+        ]}
+      >
+        <a href={`/tools/${tool.id}`} class="after:absolute after:inset-0 group-hover:text-accent">
+          {d.title}
+        </a>
+      </h3>
+    </div>
+  </div>
+
+  <p class="mt-2 text-sm text-zinc-600 dark:text-zinc-400 line-clamp-3">
+    {d.description}
+  </p>
+
+  <div class="mt-3 flex flex-wrap items-center gap-1.5">
+    <Badge label={TYPE_LABELS[d.type]} />
+    <Badge label={PRICING_LABELS[d.pricing]} tone={pricingTone} />
+    {d.maintainer === 'microsoft' && <Badge label="Microsoft" tone="microsoft" />}
+    {d.status === 'preview' && <Badge label="Preview" tone="amber" />}
+    {isDeprecated && <Badge label="Deprecated" tone="red" />}
+  </div>
+
+  {
+    d.tags.length > 0 && (
+      <ul class="mt-3 flex flex-wrap gap-1.5">
+        {d.tags.slice(0, 3).map((tag) => (
+          <li class="font-mono text-[11px] text-zinc-400">#{tag}</li>
+        ))}
+      </ul>
+    )
+  }
+</article>

@@ -1,0 +1,92 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import ToolCard from '../components/ToolCard.astro';
+import { CATEGORIES } from '../content/config';
+import { CATEGORY_LABELS, CATEGORY_DESCRIPTIONS } from '../lib/labels';
+
+const tools = await getCollection('tools');
+
+// SPEC §5.2: "Recently added": most recent entries by `added` date.
+const recent = [...tools]
+  .sort((a, b) => b.data.added.valueOf() - a.data.added.valueOf())
+  .slice(0, 6);
+
+const categoryCounts = CATEGORIES.map((category) => ({
+  category,
+  count: tools.filter((t) => t.data.category === category).length,
+})).filter(({ count }) => count > 0);
+---
+
+<BaseLayout>
+  <!-- Hero -->
+  <section class="py-12 sm:py-20 text-center">
+    <h1 class="text-4xl sm:text-5xl font-semibold tracking-tight text-balance">
+      The catalog of tools for
+      <span class="text-accent">Microsoft Fabric</span> developers
+    </h1>
+    <p class="mt-5 text-lg text-zinc-600 dark:text-zinc-400 max-w-2xl mx-auto text-pretty">
+      Discover official Microsoft offerings, open-source community projects, and
+      commercial products, in one searchable, filterable, neutral catalog.
+    </p>
+    <form action="/browse" method="get" class="mt-8 flex items-center justify-center gap-2">
+      <input
+        type="search"
+        name="q"
+        placeholder="Search tools…"
+        autocomplete="off"
+        class="w-full max-w-md rounded-md bg-zinc-50 dark:bg-zinc-900 px-4 py-2.5 text-sm ring-1 ring-zinc-200 dark:ring-zinc-800 focus:ring-accent"
+      />
+      <button
+        type="submit"
+        class="rounded-md bg-accent px-5 py-2.5 text-sm font-medium text-accent-contrast hover:opacity-90"
+        >Search</button
+      >
+    </form>
+  </section>
+
+  <!-- Category tiles -->
+  <section>
+    <div class="flex items-baseline justify-between">
+      <h2 class="text-sm font-semibold uppercase tracking-wide text-zinc-500">
+        Categories
+      </h2>
+      <a href="/browse" class="text-sm text-accent hover:underline">Browse all →</a>
+    </div>
+    <ul class="mt-4 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+      {
+        categoryCounts.map(({ category, count }) => (
+          <li>
+            <a
+              href={`/categories/${category}`}
+              class="group block h-full rounded-lg bg-zinc-50 dark:bg-zinc-900 p-5 ring-1 ring-zinc-200/60 dark:ring-zinc-800 hover:ring-accent/60 transition"
+            >
+              <div class="flex items-baseline justify-between gap-2">
+                <h3 class="font-medium group-hover:text-accent">
+                  {CATEGORY_LABELS[category]}
+                </h3>
+                <span class="font-mono text-xs text-zinc-400">{count}</span>
+              </div>
+              <p class="mt-1.5 text-sm text-zinc-600 dark:text-zinc-400">
+                {CATEGORY_DESCRIPTIONS[category]}
+              </p>
+            </a>
+          </li>
+        ))
+      }
+    </ul>
+  </section>
+
+  <!-- Recently added -->
+  <section class="mt-14">
+    <div class="flex items-baseline justify-between">
+      <h2 class="text-sm font-semibold uppercase tracking-wide text-zinc-500">
+        Recently added
+      </h2>
+      <a href="/changelog" class="text-sm text-accent hover:underline">Changelog →</a>
+    </div>
+    <div class="mt-4 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+      {recent.map((tool) => <ToolCard tool={tool} />)}
+    </div>
+  </section>
+</BaseLayout>

@@ -1,0 +1,61 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+
+<BaseLayout
+  title="Inclusion criteria"
+  description="The published criteria a tool must meet to be included in the fabricstack catalog."
+>
+  <div class="max-w-2xl prose prose-zinc dark:prose-invert">
+    <h1>Inclusion criteria</h1>
+    <p>
+      fabricstack does not rank, rate, or recommend. Inclusion is curated
+      against these published criteria: tools that meet them are in; tools that
+      don't, aren't.
+    </p>
+
+    <h2>A tool must</h2>
+    <ol>
+      <li>
+        Be specifically built for, or directly useful to, Microsoft Fabric
+        and/or Power BI development.
+      </li>
+      <li>
+        Be publicly accessible: not internal-only, and not behind a private
+        NDA or agreement.
+      </li>
+      <li>
+        Be a <strong>tool</strong>: a CLI, SDK, API, MCP server, library,
+        framework, IDE extension, desktop app, web app, template, or hosted
+        service. <strong>Not</strong> a blog post, course, book, video,
+        tutorial, or other learning material.
+      </li>
+    </ol>
+
+    <h2>What is not required</h2>
+    <ul>
+      <li>Documentation is not required.</li>
+      <li>
+        Active maintenance is not required; deprecated tools stay in the
+        catalog, marked with a badge.
+      </li>
+      <li>A free tier is not required.</li>
+    </ul>
+
+    <h2>Review</h2>
+    <p>
+      The site maintainer reviews each submission and either approves it (a pull
+      request is merged) or declines it (the issue is closed with a comment
+      referencing the criterion that wasn't met).
+    </p>
+
+    <p class="not-prose mt-8">
+      <a
+        href="/submit"
+        class="inline-flex rounded-md bg-accent px-5 py-2.5 text-sm font-medium text-accent-contrast hover:opacity-90"
+      >
+        Submit a tool →
+      </a>
+    </p>
+  </div>
+</BaseLayout>

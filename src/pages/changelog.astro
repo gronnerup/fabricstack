@@ -1,0 +1,47 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { TYPE_LABELS } from '../lib/labels';
+
+const tools = await getCollection('tools');
+const recent = tools
+  .sort((a, b) => b.data.added.valueOf() - a.data.added.valueOf())
+  .slice(0, 50);
+
+const dateFmt = new Intl.DateTimeFormat('en-US', {
+  year: 'numeric',
+  month: 'long',
+  day: 'numeric',
+});
+---
+
+<BaseLayout
+  title="Changelog"
+  description="Recently added tools in the fabricstack catalog."
+>
+  <h1 class="text-3xl font-semibold tracking-tight">Changelog</h1>
+  <p class="mt-2 text-zinc-600 dark:text-zinc-400">
+    The {recent.length} most recently added tools, newest first.
+  </p>
+
+  <ul class="mt-8 divide-y divide-zinc-200 dark:divide-zinc-800">
+    {
+      recent.map((tool) => (
+        <li class="flex items-baseline justify-between gap-4 py-3">
+          <div class="min-w-0">
+            <a href={`/tools/${tool.id}`} class="font-medium hover:text-accent">
+              {tool.data.title}
+            </a>
+            <span class="ml-2 font-mono text-[11px] uppercase text-zinc-400">
+              {TYPE_LABELS[tool.data.type]}
+            </span>
+            <p class="text-sm text-zinc-500 line-clamp-1">{tool.data.description}</p>
+          </div>
+          <time class="shrink-0 text-sm text-zinc-400 tabular-nums">
+            {dateFmt.format(tool.data.added)}
+          </time>
+        </li>
+      ))
+    }
+  </ul>
+</BaseLayout>

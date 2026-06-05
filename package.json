@@ -1,0 +1,32 @@
+{
+  "name": "fabricstack",
+  "type": "module",
+  "version": "0.1.0",
+  "private": true,
+  "description": "A curated catalog of tools, libraries, frameworks, and resources for Microsoft Fabric and Power BI developers.",
+  "scripts": {
+    "dev": "astro dev",
+    "start": "astro dev",
+    "favicons": "node scripts/fetch-favicons.mjs",
+    "og-image": "node scripts/generate-og.mjs",
+    "prebuild": "node scripts/fetch-favicons.mjs && node scripts/generate-og.mjs",
+    "build": "astro build && pagefind --site dist",
+    "preview": "astro preview",
+    "astro": "astro"
+  },
+  "dependencies": {
+    "@astrojs/sitemap": "^3.7.3",
+    "@astrojs/tailwind": "^6.0.2",
+    "@fontsource-variable/geist": "^5.2.9",
+    "@fontsource-variable/geist-mono": "^5.2.8",
+    "@tailwindcss/typography": "^0.5.19",
+    "astro": "^5.18.2",
+    "tailwindcss": "^3.4.19"
+  },
+  "devDependencies": {
+    "@astrojs/check": "^0.9.9",
+    "@resvg/resvg-js": "^2.6.2",
+    "pagefind": "^1.5.2",
+    "typescript": "^5.9.3"
+  }
+}

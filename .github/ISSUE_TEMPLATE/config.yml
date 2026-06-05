@@ -1,0 +1,5 @@
+blank_issues_enabled: true
+contact_links:
+  - name: Inclusion criteria
+    url: https://fabricstack.dev/criteria
+    about: What qualifies for the catalog before you submit a tool.

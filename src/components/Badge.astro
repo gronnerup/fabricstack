@@ -1,0 +1,32 @@
+---
+type Tone = 'neutral' | 'green' | 'blue' | 'amber' | 'red' | 'microsoft';
+
+interface Props {
+  label: string;
+  tone?: Tone;
+  /** Render in a smaller, lighter "tag chip" style. */
+  subtle?: boolean;
+}
+
+const { label, tone = 'neutral', subtle = false } = Astro.props;
+
+// Restrained, low-contrast tints per SPEC §6.4.
+const tones: Record<Tone, string> = {
+  neutral: 'bg-zinc-100 text-zinc-600 dark:bg-zinc-800 dark:text-zinc-300',
+  green: 'bg-green-100 text-green-700 dark:bg-green-950/60 dark:text-green-400',
+  blue: 'bg-blue-100 text-blue-700 dark:bg-blue-950/60 dark:text-blue-400',
+  amber: 'bg-amber-100 text-amber-700 dark:bg-amber-950/60 dark:text-amber-400',
+  red: 'bg-red-100 text-red-700 dark:bg-red-950/60 dark:text-red-400',
+  microsoft: 'bg-zinc-100 text-zinc-500 dark:bg-zinc-800 dark:text-zinc-400 ring-1 ring-inset ring-zinc-200 dark:ring-zinc-700',
+};
+---
+
+<span
+  class:list={[
+    'inline-flex items-center rounded font-medium',
+    subtle ? 'text-[11px] px-1.5 py-0.5' : 'text-xs px-2 py-0.5',
+    tones[tone],
+  ]}
+>
+  {label}
+</span>

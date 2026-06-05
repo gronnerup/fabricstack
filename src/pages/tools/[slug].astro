@@ -1,0 +1,132 @@
+---
+import { getCollection, render } from 'astro:content';
+import type { GetStaticPaths } from 'astro';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+
+export const getStaticPaths = (async () => {
+  const tools = await getCollection('tools');
+  return tools.map((tool) => ({
+    params: { slug: tool.id },
+    props: { tool },
+  }));
+}) satisfies GetStaticPaths;
+
+const { tool } = Astro.props;
+const { Content } = await render(tool);
+const d = tool.data;
+
+const dateFmt = new Intl.DateTimeFormat('en-US', {
+  year: 'numeric',
+  month: 'short',
+  day: 'numeric',
+});
+
+// SPEC §5.4 action row + §9.3 "Suggest edit" deep-link.
+const editUrl = `https://github.com/gronnerup/fabricstack/edit/main/src/content/tools/${tool.id}.md`;
+
+const meta: [string, string | undefined][] = [
+  ['Category', d.category],
+  ['Type', d.type],
+  ['Language', d.language],
+  ['Maintainer', d.maintainer],
+  ['Author', d.author],
+  ['Added', dateFmt.format(d.added)],
+];
+---
+
+<BaseLayout title={d.title} description={d.description}>
+  <article class="max-w-3xl" data-pagefind-body>
+    <div class="flex flex-wrap items-center gap-3">
+      <h1
+        class:list={[
+          'text-3xl font-semibold tracking-tight',
+          d.status === 'deprecated' && 'line-through',
+        ]}
+      >
+        {d.title}
+      </h1>
+      <span class="font-mono text-xs uppercase rounded bg-zinc-100 dark:bg-zinc-800 px-2 py-1 text-zinc-600 dark:text-zinc-400">
+        {d.pricing}
+      </span>
+      {
+        d.status !== 'ga' && (
+          <span class="font-mono text-xs uppercase rounded bg-zinc-100 dark:bg-zinc-800 px-2 py-1 text-zinc-600 dark:text-zinc-400">
+            {d.status}
+          </span>
+        )
+      }
+    </div>
+
+    <p class="mt-4 text-lg text-zinc-600 dark:text-zinc-400">{d.description}</p>
+
+    <!-- Action row -->
+    <div class="mt-6 flex flex-wrap gap-3 text-sm">
+      <a
+        href={d.url}
+        class="rounded-md bg-accent px-4 py-2 font-medium text-accent-contrast hover:opacity-90"
+        >Visit</a
+      >
+      {
+        d.docs_url && (
+          <a
+            href={d.docs_url}
+            class="rounded-md px-4 py-2 ring-1 ring-zinc-300 dark:ring-zinc-700 hover:ring-accent"
+          >
+            Docs
+          </a>
+        )
+      }
+      {
+        d.repo_url && (
+          <a
+            href={d.repo_url}
+            class="rounded-md px-4 py-2 ring-1 ring-zinc-300 dark:ring-zinc-700 hover:ring-accent"
+          >
+            Source
+          </a>
+        )
+      }
+      <a
+        href={editUrl}
+        class="rounded-md px-4 py-2 ring-1 ring-zinc-300 dark:ring-zinc-700 hover:ring-accent"
+        >Suggest edit</a
+      >
+    </div>
+
+    <!-- Metadata table -->
+    <dl class="mt-8 grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-2 text-sm">
+      {
+        meta
+          .filter(([, v]) => v)
+          .map(([k, v]) => (
+            <div class="flex justify-between gap-4 border-b border-zinc-100 dark:border-zinc-800 py-1.5">
+              <dt class="text-zinc-500">{k}</dt>
+              <dd class="font-mono text-zinc-800 dark:text-zinc-200">{v}</dd>
+            </div>
+          ))
+      }
+    </dl>
+
+    {
+      d.tags.length > 0 && (
+        <ul class="mt-6 flex flex-wrap gap-2">
+          {d.tags.map((tag) => (
+            <li>
+              <a
+                href={`/browse?tag=${tag}`}
+                class="font-mono text-xs rounded-full bg-zinc-100 dark:bg-zinc-800 px-2.5 py-1 text-zinc-600 dark:text-zinc-400 hover:text-accent"
+              >
+                {tag}
+              </a>
+            </li>
+          ))}
+        </ul>
+      )
+    }
+
+    <!-- Long-form body -->
+    <div class="prose prose-zinc dark:prose-invert mt-10 max-w-none">
+      <Content />
+    </div>
+  </article>
+</BaseLayout>

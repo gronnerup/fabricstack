@@ -1,0 +1,83 @@
+---
+import '../styles/global.css';
+import Logo from '../components/Logo.astro';
+
+interface Props {
+  /** Page-specific title; appended to the brand + "Microsoft Fabric" suffix. */
+  title?: string;
+  /** Meta description for this page. */
+  description?: string;
+}
+
+const {
+  title,
+  description = 'A curated, neutral catalog of tools, libraries, frameworks, and resources for Microsoft Fabric and Power BI developers.',
+} = Astro.props;
+
+// SPEC §2: always pair the brand with "Microsoft Fabric" in <title> so the
+// scope is unambiguous against the many other "Fabric" products.
+const SUFFIX = 'fabricstack: Tools for Microsoft Fabric';
+const pageTitle = title ? `${title} · ${SUFFIX}` : SUFFIX;
+
+const canonical = new URL(Astro.url.pathname, Astro.site);
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="canonical" href={canonical} />
+
+    <title>{pageTitle}</title>
+    <meta name="description" content={description} />
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content={pageTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={new URL('/og-image.png', Astro.site)} />
+    <meta name="twitter:card" content="summary_large_image" />
+
+    <meta name="generator" content={Astro.generator} />
+  </head>
+  <body class="min-h-dvh flex flex-col">
+    <header class="border-b border-zinc-200 dark:border-zinc-800">
+      <div class="mx-auto max-w-content w-full px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+        <Logo />
+        <nav class="flex items-center gap-5 text-sm text-zinc-600 dark:text-zinc-400">
+          <a href="/browse" class="hover:text-accent">Browse</a>
+          <a href="/submit" class="hover:text-accent">Submit</a>
+          <a href="/criteria" class="hover:text-accent">Criteria</a>
+          <a href="/about" class="hover:text-accent">About</a>
+        </nav>
+      </div>
+    </header>
+
+    <main class="mx-auto max-w-content w-full px-4 sm:px-6 lg:px-8 flex-1 py-10">
+      <slot />
+    </main>
+
+    <footer class="border-t border-zinc-200 dark:border-zinc-800 mt-16">
+      <div
+        class="mx-auto max-w-content w-full px-4 sm:px-6 lg:px-8 py-8 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 text-sm text-zinc-500"
+      >
+        <p>
+          The catalog of tools for Microsoft Fabric developers. Content
+          licensed <a class="hover:text-accent underline" href="https://creativecommons.org/licenses/by/4.0/">CC&nbsp;BY&nbsp;4.0</a>.
+        </p>
+        <nav class="flex items-center gap-5">
+          <a href="/submit" class="hover:text-accent">Submit a tool</a>
+          <a href="/criteria" class="hover:text-accent">Criteria</a>
+          <a href="/about" class="hover:text-accent">About</a>
+          <a
+            href="https://github.com/gronnerup/fabricstack"
+            class="hover:text-accent">GitHub</a
+          >
+        </nav>
+      </div>
+    </footer>
+  </body>
+</html>

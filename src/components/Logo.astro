@@ -1,0 +1,44 @@
+---
+interface Props {
+  /** Extra classes for the wrapping link. */
+  class?: string;
+  /** Hide the wordmark and render the icon only. */
+  iconOnly?: boolean;
+}
+
+const { class: className, iconOnly = false } = Astro.props;
+---
+
+<a
+  href="/"
+  class:list={['inline-flex items-center gap-2.5', className]}
+  aria-label="fabricstack.dev home"
+>
+  <svg
+    viewBox="0 0 48 48"
+    class="h-7 w-7 shrink-0"
+    role="img"
+    aria-label="fabricstack.dev logo"
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    <!-- bottom layer (green) -->
+    <path d="M8 35 L24 43 L24 46.5 L8 38.5 Z" fill="#3F9433" />
+    <path d="M24 43 L40 35 L40 38.5 L24 46.5 Z" fill="#327A28" />
+    <path d="M24 27 L40 35 L24 43 L8 35 Z" fill="#57B947" />
+    <!-- middle layer (blue) -->
+    <path d="M8 25 L24 33 L24 36.5 L8 28.5 Z" fill="#1E86B8" />
+    <path d="M24 33 L40 25 L40 28.5 L24 36.5 Z" fill="#176E97" />
+    <path d="M24 17 L40 25 L24 33 L8 25 Z" fill="#2FA9E0" />
+    <!-- top layer (yellow) -->
+    <path d="M8 15 L24 23 L24 26.5 L8 18.5 Z" fill="#D9A904" />
+    <path d="M24 23 L40 15 L40 18.5 L24 26.5 Z" fill="#B98E03" />
+    <path d="M24 7 L40 15 L24 23 L8 15 Z" fill="#F4C20D" />
+  </svg>
+  {
+    !iconOnly && (
+      <span class="text-lg font-semibold tracking-tight text-zinc-900 dark:text-zinc-100">
+        fabricstack<span class="font-normal text-zinc-400">.dev</span>
+      </span>
+    )
+  }
+</a>
