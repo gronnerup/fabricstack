@@ -29,6 +29,9 @@ const categoryCounts = CATEGORIES.map((category) => ({
       Discover official Microsoft offerings, open-source community projects, and
       commercial products, in one searchable, filterable, neutral catalog.
     </p>
+    <p class="mt-4 text-sm font-mono text-zinc-500">
+      {tools.length} tools across {categoryCounts.length} categories
+    </p>
     <form action="/browse" method="get" class="mt-8 flex items-center justify-center gap-2">
       <input
         type="search"

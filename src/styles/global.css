@@ -10,18 +10,20 @@
   :root {
     /* Accent = teal-600 light / teal-400 dark (SPEC §6.1).
        Stored as space-separated RGB channels for Tailwind's
-       `rgb(var(--color-accent) / <alpha-value>)` mapping. */
+       `rgb(var(--color-accent) / <alpha-value>)` mapping.
+       The dark palette is applied via [data-theme="dark"], which the head
+       script sets from the saved preference or the system setting. */
     --color-accent: 13 148 136; /* #0d9488 teal-600 */
     --color-accent-contrast: 255 255 255; /* white text on accent */
 
-    color-scheme: light dark;
+    color-scheme: light;
   }
 
-  @media (prefers-color-scheme: dark) {
-    :root {
-      --color-accent: 45 212 191; /* #2dd4bf teal-400 */
-      --color-accent-contrast: 9 9 11; /* zinc-950 text on bright accent */
-    }
+  :root[data-theme='dark'] {
+    --color-accent: 45 212 191; /* #2dd4bf teal-400 */
+    --color-accent-contrast: 9 9 11; /* zinc-950 text on bright accent */
+
+    color-scheme: dark;
   }
 
   html {

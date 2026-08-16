@@ -1,6 +1,7 @@
 ---
 import '../styles/global.css';
 import Logo from '../components/Logo.astro';
+import ThemeToggle from '../components/ThemeToggle.astro';
 
 interface Props {
   /** Page-specific title; appended to the brand + "Microsoft Fabric" suffix. */
@@ -27,6 +28,20 @@ const canonical = new URL(Astro.url.pathname, Astro.site);
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    {/* Apply the saved theme (or system) before paint to avoid a flash. */}
+    <script is:inline>
+      (function () {
+        try {
+          var p = localStorage.getItem('theme');
+          var dark =
+            p === 'dark' ||
+            ((p === 'system' || !p) &&
+              window.matchMedia('(prefers-color-scheme: dark)').matches);
+          document.documentElement.setAttribute('data-theme', dark ? 'dark' : 'light');
+        } catch (e) {}
+      })();
+    </script>
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="canonical" href={canonical} />
 
@@ -44,19 +59,25 @@ const canonical = new URL(Astro.url.pathname, Astro.site);
     <meta name="generator" content={Astro.generator} />
   </head>
   <body class="min-h-dvh flex flex-col">
+    <a
+      href="#main"
+      class="sr-only focus:not-sr-only focus:absolute focus:z-50 focus:m-2 focus:rounded-md focus:bg-accent focus:px-3 focus:py-2 focus:text-sm focus:text-accent-contrast"
+      >Skip to content</a
+    >
     <header class="border-b border-zinc-200 dark:border-zinc-800">
       <div class="mx-auto max-w-content w-full px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
         <Logo />
-        <nav class="flex items-center gap-5 text-sm text-zinc-600 dark:text-zinc-400">
+        <nav class="flex items-center gap-4 sm:gap-5 text-sm text-zinc-600 dark:text-zinc-400">
           <a href="/browse" class="hover:text-accent">Browse</a>
           <a href="/submit" class="hover:text-accent">Submit</a>
-          <a href="/criteria" class="hover:text-accent">Criteria</a>
+          <a href="/criteria" class="hidden sm:inline hover:text-accent">Criteria</a>
           <a href="/about" class="hover:text-accent">About</a>
+          <ThemeToggle />
         </nav>
       </div>
     </header>
 
-    <main class="mx-auto max-w-content w-full px-4 sm:px-6 lg:px-8 flex-1 py-10">
+    <main id="main" class="mx-auto max-w-content w-full px-4 sm:px-6 lg:px-8 flex-1 py-10">
       <slot />
     </main>
 
