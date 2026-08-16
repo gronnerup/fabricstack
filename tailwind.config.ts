@@ -15,7 +15,10 @@ import typography from '@tailwindcss/typography';
  */
 export default {
   content: ['./src/**/*.{astro,html,js,jsx,md,mdx,svelte,ts,tsx,vue}'],
-  darkMode: 'media',
+  // Manual theme control: dark applies when <html data-theme="dark"> is set.
+  // A head script resolves the "system" choice to a concrete data-theme, so
+  // this selector covers both explicit and system-following dark mode.
+  darkMode: ['selector', '[data-theme="dark"]'],
   theme: {
     extend: {
       colors: {
