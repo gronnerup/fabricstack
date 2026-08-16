@@ -1,0 +1,3 @@
+# Allow the public catalog API to be fetched cross-origin.
+/api/*
+  Access-Control-Allow-Origin: *
