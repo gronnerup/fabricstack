@@ -2,16 +2,31 @@
 import { getCollection, render } from 'astro:content';
 import type { GetStaticPaths } from 'astro';
 import BaseLayout from '../../layouts/BaseLayout.astro';
+import ToolCard from '../../components/ToolCard.astro';
 
 export const getStaticPaths = (async () => {
   const tools = await getCollection('tools');
-  return tools.map((tool) => ({
-    params: { slug: tool.id },
-    props: { tool },
-  }));
+  return tools.map((tool) => {
+    // Related = same category (+2) or shared tags (+1 each); top 3 (SPEC §5.4).
+    const related = tools
+      .filter((t) => t.id !== tool.id)
+      .map((t) => {
+        const shared = t.data.tags.filter((tag) => tool.data.tags.includes(tag)).length;
+        const score = (t.data.category === tool.data.category ? 2 : 0) + shared;
+        return { t, score };
+      })
+      .filter((x) => x.score > 0)
+      .sort(
+        (a, b) => b.score - a.score || b.t.data.added.valueOf() - a.t.data.added.valueOf(),
+      )
+      .slice(0, 3)
+      .map((x) => x.t);
+
+    return { params: { slug: tool.id }, props: { tool, related } };
+  });
 }) satisfies GetStaticPaths;
 
-const { tool } = Astro.props;
+const { tool, related } = Astro.props;
 const { Content } = await render(tool);
 const d = tool.data;
 
@@ -129,4 +144,19 @@ const meta: [string, string | undefined][] = [
       <Content />
     </div>
   </article>
+
+  {
+    related.length > 0 && (
+      <section class="mt-14">
+        <h2 class="text-sm font-semibold uppercase tracking-wide text-zinc-500">
+          Related tools
+        </h2>
+        <div class="mt-4 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+          {related.map((t) => (
+            <ToolCard tool={t} />
+          ))}
+        </div>
+      </section>
+    )
+  }
 </BaseLayout>

@@ -44,6 +44,12 @@ const canonical = new URL(Astro.url.pathname, Astro.site);
     </script>
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="canonical" href={canonical} />
+    <link
+      rel="alternate"
+      type="application/rss+xml"
+      title="fabricstack: recently added tools"
+      href="/rss.xml"
+    />
 
     <title>{pageTitle}</title>
     <meta name="description" content={description} />
@@ -93,6 +99,8 @@ const canonical = new URL(Astro.url.pathname, Astro.site);
           <a href="/submit" class="hover:text-accent">Submit a tool</a>
           <a href="/criteria" class="hover:text-accent">Criteria</a>
           <a href="/about" class="hover:text-accent">About</a>
+          <a href="/rss.xml" class="hover:text-accent">RSS</a>
+          <a href="/api/tools.json" class="hover:text-accent">API</a>
           <a
             href="https://github.com/gronnerup/fabricstack"
             class="hover:text-accent">GitHub</a
