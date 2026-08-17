@@ -108,5 +108,22 @@ const canonical = new URL(Astro.url.pathname, Astro.site);
         </nav>
       </div>
     </footer>
+
+    <script>
+      // Open external links (different origin) in a new tab. Covers the Visit
+      // action, footer links, and links inside rendered tool descriptions.
+      for (const a of document.querySelectorAll<HTMLAnchorElement>('a[href]')) {
+        const href = a.getAttribute('href');
+        if (!href) continue;
+        try {
+          if (new URL(href, location.href).origin !== location.origin) {
+            a.target = '_blank';
+            a.rel = 'noopener noreferrer';
+          }
+        } catch {
+          /* ignore malformed hrefs */
+        }
+      }
+    </script>
   </body>
 </html>
